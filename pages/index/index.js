@@ -1,13 +1,17 @@
 //index.js
 //获取应用实例
 const app = getApp()
-
+var QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
+var qqMap = new QQMapWX({
+  key: 'UMCBZ-DI6C4-JHEUD-XWNJ6-PV2SH-EBBX2' 
+});
 Page({
   data: {
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    county: app.globalData.defaultCounty,
   },
   //事件处理函数
   bindViewTap: function() {
@@ -16,6 +20,7 @@ Page({
     })
   },
   onLoad: function () {
+var page =this;
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
@@ -42,7 +47,55 @@ Page({
         }
       })
     }
+
+
+
+    wx.getLocation({
+      success: function (res) {
+        // console.log("getLocation--" + res.latitude +" --  "+ res.longitude +"---"+ res.speed + res.accuracy)
+        var latitude = res.latitude
+        var longitude = res.longitude
+        // qqMap.getCityList({
+        //   success: function (res) {
+        //     console.log(res);
+        //   },
+        //   fail: function (res) {
+        //     console.log(res);
+        //   },
+        //   complete: function (res) {
+        //     console.log(res);
+        //   }
+        // });
+        qqMap.reverseGeocoder({
+          location: {
+            latitude: latitude,
+            longitude: longitude
+          },
+          success: function (res) {
+            console.log(res);
+            page.setData({
+              county: res.result.address_component.district,
+            
+            })
+          },
+          fail: function (res) {
+            console.log(res);
+          },
+          complete: function (res) {
+            console.log(res);
+          }
+        });
+        // wx.openLocation({
+        //   latitude: latitude,
+        //   longitude: longitude,
+        //   scale: 28
+        // })
+     
+      }
+    })
+
   },
+  
   getUserInfo: function(e) {
     console.log(e)
     app.globalData.userInfo = e.detail.userInfo
@@ -50,5 +103,23 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
+  },
+  onShow: function () {
+    this.setData({
+      county: app.globalData.defaultCounty
+    })
+  },
+  addressClick:function(e){
+    wx.showLoading({
+      title: '跳转中',
+    })
+      wx.navigateTo({
+        url: '../switchcity/switchcity',
+        complete: function () {
+          wx.hideLoading()
+        }
+      })
+      
+
   }
 })

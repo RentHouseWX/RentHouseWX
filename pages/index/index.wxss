@@ -19,3 +19,20 @@
 .usermotto {
   margin-top: 200px;
 }
+
+.address-bt{
+ border-bottom-left-radius: 5px;
+ border-top-left-radius: 5px;
+  width: 200rpx;
+  height: 70rpx; 
+  align-content: left;
+  align-items: left;
+  display: table-cell;
+  vertical-align: middle;
+ 
+}
+
+.address-t{
+  text-align: center;
+  align-items: center;
+}
