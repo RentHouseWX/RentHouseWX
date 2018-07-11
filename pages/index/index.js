@@ -55,17 +55,6 @@ var page =this;
         // console.log("getLocation--" + res.latitude +" --  "+ res.longitude +"---"+ res.speed + res.accuracy)
         var latitude = res.latitude
         var longitude = res.longitude
-        // qqMap.getCityList({
-        //   success: function (res) {
-        //     console.log(res);
-        //   },
-        //   fail: function (res) {
-        //     console.log(res);
-        //   },
-        //   complete: function (res) {
-        //     console.log(res);
-        //   }
-        // });
         qqMap.reverseGeocoder({
           location: {
             latitude: latitude,
@@ -85,11 +74,7 @@ var page =this;
             console.log(res);
           }
         });
-        // wx.openLocation({
-        //   latitude: latitude,
-        //   longitude: longitude,
-        //   scale: 28
-        // })
+
      
       }
     })
@@ -105,9 +90,15 @@ var page =this;
     })
   },
   onShow: function () {
-    this.setData({
-      county: app.globalData.defaultCounty
-    })
+    var data = app.globalData.defaultCounty
+    if(data!=null){
+      this.setData({
+        county: data
+
+
+      })
+    }
+   
   },
   addressClick:function(e){
     wx.showLoading({
